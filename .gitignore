@@ -1,0 +1,57 @@
+# ── Contenido personal (PRIVADO: nunca publicar) ──
+contenido-plano.js
+contenido-plano*.js
+contenido-plano*
+*.plano.js
+*-plano.js
+privado/
+personal/
+respaldo*/
+backup*/
+
+# ── Fotos originales y material de trabajo ──
+fotos/
+fotos-originales/
+originales/
+*.jpg
+*.jpeg
+*.JPG
+*.JPEG
+*.heic
+*.HEIC
+*.heif
+*.webp
+*.mov
+*.MOV
+*.mp4
+*.zip
+*.mp3
+*.MP3
+*.m4a
+*.aac
+*.wav
+*.ogg
+*.flac
+
+# ── Respaldos y temporales ──
+*.bak
+*.tmp
+*.old
+*.orig
+*.swp
+*~
+contenido.enc.js.tmp
+medios.tmp/
+medios.old/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Herramientas ──
+node_modules/
+.claude/
+.playwright-mcp/
+.vscode/
+.idea/
+
+# Nota: contenido.enc.js y medios/*.bin NO se ignoran: son el contenido CIFRADO que se publica.

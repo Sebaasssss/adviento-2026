@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#f7efe4">
+  <meta name="color-scheme" content="light">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Adviento">
+  <title>Adviento</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+  <!-- ============ INICIO (bloqueado) ============ -->
+  <main id="pantalla-bloqueo" class="login">
+    <div class="login__mosaico" id="login-mosaico" aria-hidden="true"></div>
+
+    <div class="login__cuerpo">
+      <p class="antetitulo">Diciembre · 2026</p>
+      <h1 class="login__titulo">Adviento</h1>
+
+      <form id="form-clave" class="login__form" autocomplete="on" novalidate>
+        <input type="text" name="username" autocomplete="username" value="Adviento" class="sr-only" tabindex="-1" aria-hidden="true" readonly>
+        <label for="clave" class="login__etiqueta">Contraseña</label>
+        <input id="clave" name="password" type="password" class="campo"
+               autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false"
+               enterkeyhint="go" required>
+        <label class="recordar">
+          <input id="recordar" type="checkbox" checked>
+          <span>Recordar en este dispositivo</span>
+        </label>
+        <button id="btn-abrir" type="submit" class="boton boton--rojo boton--ancho">Abrir</button>
+        <p id="error-clave" class="login__error" role="alert" aria-live="polite"></p>
+      </form>
+    </div>
+  </main>
+
+  <!-- ============ CALENDARIO ============ -->
+  <main id="pantalla-calendario" class="calendario" hidden>
+    <header class="cabecera">
+      <div id="indicador-prueba" class="indicador-prueba" hidden>
+        <span>Modo de prueba</span>
+        <button id="btn-salir-prueba" type="button" class="enlace">Salir</button>
+      </div>
+      <p class="antetitulo">Diciembre · 2026</p>
+      <h1 id="titulo" class="cabecera__titulo"></h1>
+      <p id="dedicatoria" class="cabecera__dedicatoria"></p>
+    </header>
+
+    <section class="bienvenida" aria-label="Bienvenida">
+      <p id="bienvenida"></p>
+    </section>
+
+    <section class="progreso" aria-label="Progreso">
+      <p class="progreso__texto"><span id="progreso-abiertas"></span><span id="progreso-disponibles"></span></p>
+      <div class="progreso__barra" role="progressbar" aria-valuemin="0" aria-valuemax="25" id="progreso-barra">
+        <span id="progreso-ab"></span>
+      </div>
+      <p id="aviso-fecha" class="progreso__aviso"></p>
+    </section>
+
+    <ol id="puertas" class="puertas" aria-label="Días del 1 al 25"></ol>
+
+    <section id="final" class="final" hidden>
+      <p id="mensaje-final"></p>
+      <p id="firma-final" class="firma"></p>
+    </section>
+
+    <footer class="pie">
+      <button id="btn-bloquear" type="button" class="enlace">Bloquear en este dispositivo</button>
+    </footer>
+  </main>
+
+  <!-- ============ DÍA ============ -->
+  <article id="pantalla-dia" class="dia" hidden aria-labelledby="dia-titulo">
+    <div class="dia__barra">
+      <button id="btn-volver" type="button" class="volver"><span class="volver__icono" id="volver-icono"></span><span>Calendario</span></button>
+      <span id="dia-fecha" class="dia__fecha"></span>
+    </div>
+    <div id="dia-cuerpo" class="dia__cuerpo"></div>
+  </article>
+
+  <!-- Música de fondo -->
+  <button id="btn-musica" type="button" class="btn-musica" aria-pressed="false" aria-label="Música de fondo" hidden></button>
+
+  <!-- ============ CONFIRMACIÓN ============ -->
+  <div id="confirmar" class="confirmar" hidden>
+    <div class="confirmar__caja" role="alertdialog" aria-modal="true" aria-labelledby="confirmar-texto">
+      <p id="confirmar-texto"></p>
+      <div class="confirmar__botones">
+        <button id="confirmar-no" type="button" class="boton boton--borde">Cancelar</button>
+        <button id="confirmar-si" type="button" class="boton boton--rojo">Sí</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ AVISOS ============ -->
+  <div id="aviso" class="aviso" role="status" aria-live="polite" hidden>
+    <span id="aviso-texto"></span>
+    <button id="aviso-accion" type="button" class="enlace enlace--claro" hidden></button>
+  </div>
+
+  <noscript><p class="noscript">Esta página necesita JavaScript.</p></noscript>
+
+  <script src="contenido.enc.js"></script>
+  <script src="js/arte.js"></script>
+  <script src="js/cripto.js"></script>
+  <script src="js/musica.js"></script>
+  <script src="js/juegos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
