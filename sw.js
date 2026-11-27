@@ -8,14 +8,16 @@
  *   (stale-while-revalidate), así la siguiente apertura recibe lo nuevo.
  * - Al cambiar CACHE_VERSION se instala una versión nueva, se activa sola
  *   y se borran las cachés anteriores.
- * - medios/*.bin (fotos y canciones cifradas): caché primero, sin revalidar
- *   (cifrar.js les da nombres nuevos cada vez). La app los descarga tras
- *   desbloquear para que queden disponibles sin conexión.
+ * - medios/*.bin (fotos, videos y canciones cifradas): caché primero, en una
+ *   caché PROPIA ("adviento-medios") que NO se borra al cambiar CACHE_VERSION,
+ *   así actualizar la app no obliga a volver a descargar ~60 MB. cifrar.js les
+ *   da nombres nuevos cada vez y la app borra los que ya no se usan.
  * - contenido-plano.js y privado/ NUNCA se cachean.
  */
 
-const CACHE_VERSION = "v7";                 // ← súbelo (v2, v3...) en cada publicación
+const CACHE_VERSION = "v8";                 // ← súbelo (v2, v3...) en cada publicación
 const CACHE = "adviento-" + CACHE_VERSION;
+const CACHE_MEDIOS = "adviento-medios";   // no depende de la versión
 
 const RECURSOS = [
   "./",
@@ -49,7 +51,7 @@ self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
     const nombres = await caches.keys();
     await Promise.all(
-      nombres.filter((n) => n.startsWith("adviento-") && n !== CACHE).map((n) => caches.delete(n))
+      nombres.filter((n) => n.startsWith("adviento-") && n !== CACHE && n !== CACHE_MEDIOS).map((n) => caches.delete(n))
     );
     await self.clients.claim();
   })());
@@ -104,7 +106,7 @@ async function cachePrimero(req, event) {
 }
 
 async function soloCache(req) {
-  const cache = await caches.open(CACHE);
+  const cache = await caches.open(CACHE_MEDIOS);
   const guardada = await cache.match(req);
   if (guardada) return guardada;
   const resp = await fetch(req);

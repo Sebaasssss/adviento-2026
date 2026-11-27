@@ -125,12 +125,28 @@
     }
   }
 
+  /** Borra de la caché los medios que ya no usa el contenido actual. */
+  async function limpiarMedios(refs) {
+    try {
+      if (!self.caches || !(await caches.has("adviento-medios"))) return;
+      var vigentes = {};
+      refs.forEach(function (r) { vigentes[r.m.split("/").pop()] = true; });
+      var cache = await caches.open("adviento-medios");
+      var claves = await cache.keys();
+      for (var i = 0; i < claves.length; i++) {
+        var nombre = new URL(claves[i].url).pathname.split("/").pop();
+        if (!vigentes[nombre]) await cache.delete(claves[i]);
+      }
+    } catch (e) { /* no es importante */ }
+  }
+
   /* ---------- API pública ---------- */
   self.Cripto = {
     disponible: disponible,
     hayContenido: function () { return !!paquete(); },
     medio: medio,
     precargar: precargar,
+    limpiarMedios: limpiarMedios,
 
     /** Descifra con contraseña. Lanza Error genérico si falla. */
     abrirConContrasena: async function (contrasena, recordar) {

@@ -145,9 +145,21 @@
     pintarPuertas();
     window.scrollTo(0, 0);
     iniciarMusica();
-    Cripto.precargar(listaMedios()); // para tenerlo todo sin conexión
+    Cripto.limpiarMedios(todosLosMedios()).then(function () {
+      Cripto.precargar(listaMedios()); // para tenerlo todo sin conexión
+    });
     var m = /^#dia-(\d+)$/.exec(location.hash);
     if (m && estaDesbloqueada(+m[1])) mostrarDia(+m[1], false);
+  }
+
+  function todosLosMedios() {
+    var refs = [];
+    (function recorrer(o) {
+      if (!o || typeof o !== "object") return;
+      if (o.medio && o.medio.m) refs.push(o.medio);
+      Object.keys(o).forEach(function (k) { recorrer(o[k]); });
+    })(contenido);
+    return refs;
   }
 
   function listaMedios() {
