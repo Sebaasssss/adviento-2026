@@ -25,7 +25,7 @@ servidor. No hay dependencias externas, CDN, fuentes remotas ni APIs.
 | `js/cripto.js` | ✅ | Descifrado con Web Crypto, medios cifrados y recuerdo del desbloqueo (IndexedDB). |
 | `js/musica.js` | ✅ | Música de fondo y reproductor de la canción de cada día. |
 | `js/juegos.js` | ✅ | Trivia, memorama, sopa de letras y adivinanzas. |
-| `js/app.js` | ✅ | Calendario, fechas, vista de cada día, progreso, modo de prueba y Service Worker. |
+| `js/app.js` | ✅ | Calendario, fechas, vista de cada día, progreso y Service Worker. |
 | `manifest.json` | ✅ | Manifiesto PWA (rutas relativas). |
 | `sw.js` | ✅ | Service Worker: caché offline con `CACHE_VERSION`. |
 | `contenido.enc.js` | ✅ | Textos **cifrados**. Se genera con `cifrar.js`. |
@@ -48,13 +48,6 @@ python -m http.server 8080
 
 y abre <http://localhost:8080/>. Para simular GitHub Pages en un subdirectorio,
 sirve la carpeta **padre** y abre `http://localhost:8080/adviento-2026/`.
-
-### Modo de prueba
-
-Después de desbloquear, toca **5 veces seguidas** (en menos de 2,5 s) el
-título. Se abren todas las puertas sin importar la fecha y aparece un
-indicador «Modo de prueba». Nada de lo que hagas en este modo se guarda.
-Pulsa «Salir» o recarga para desactivarlo.
 
 ---
 

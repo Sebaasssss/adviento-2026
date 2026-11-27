@@ -4,7 +4,7 @@
  * - Calendario de 25 puertas según la fecha LOCAL del dispositivo.
  * - Vista de cada día (página propia, con scroll normal): fotos, mini carta,
  *   canción y juegos.
- * - Música de fondo, progreso local y modo de prueba oculto.
+ * - Música de fondo y progreso local.
  * - Registro del Service Worker.
  *
  * Privacidad: el contenido descifrado vive solo en memoria. En
@@ -22,24 +22,22 @@
   var reduceMov = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var contenido = null;      // datos descifrados (solo memoria)
-  var modoPrueba = false;
   var diaAbierto = null;
   var scrollCalendario = 0;
 
   /* =========================================================
-     Progreso (localStorage). En modo prueba se usa una copia en memoria.
+     Progreso (localStorage).
      ========================================================= */
   var Progreso = {
-    real: null, prueba: null,
+    real: null,
     cargar: function () {
       try { this.real = JSON.parse(localStorage.getItem(CLAVE_PROGRESO)) || {}; } catch (e) { this.real = {}; }
       this.real.abiertas = this.real.abiertas || {};
       this.real.juegos = this.real.juegos || {};
       this.real.vales = this.real.vales || {};
     },
-    get d() { return this.prueba || this.real; },
+    get d() { return this.real; },
     guardar: function () {
-      if (this.prueba) return; // el modo de prueba nunca toca el progreso real
       try { localStorage.setItem(CLAVE_PROGRESO, JSON.stringify(this.real)); } catch (e) {}
     }
   };
@@ -52,7 +50,7 @@
     return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
   }
   function fechaNum(n) { return ANIO * 10000 + MES * 100 + n; }
-  function estaDesbloqueada(n) { return modoPrueba || hoyNum() >= fechaNum(n); }
+  function estaDesbloqueada(n) { return hoyNum() >= fechaNum(n); }
   function diasHasta(n) {
     var d = new Date();
     var hoy = new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -229,13 +227,11 @@
     $("progreso-barra").setAttribute("aria-valuetext", abiertas + " puertas abiertas de " + TOTAL);
 
     var aviso = "", hasta = diasHasta(1);
-    if (modoPrueba) aviso = "Modo de prueba: todas las puertas están disponibles y no se guarda nada.";
-    else if (hasta > 0) aviso = "La primera puerta se abre el 1 de diciembre. " + faltan(hasta).replace(/^f/, "F") + ".";
+    if (hasta > 0) aviso = "La primera puerta se abre el 1 de diciembre. " + faltan(hasta).replace(/^f/, "F") + ".";
     else if (hoy > fechaNum(TOTAL)) aviso = "Todas las puertas están abiertas. Vuelve a cualquiera cuando quieras.";
     $("aviso-fecha").textContent = aviso;
 
-    $("final").hidden = !(Progreso.d.abiertas[TOTAL] && contenido.general && contenido.general.mensajeFinal);
-    $("indicador-prueba").hidden = !modoPrueba;
+    $("final").hidden = !(contenido.general && contenido.general.mensajeFinal); // siempre visible
   }
 
   function crearPuerta(n, libre, vista, esHoy) {
@@ -465,23 +461,6 @@
   }
 
   /* =========================================================
-     Modo de prueba: 5 toques al título en menos de 2,5 s
-     ========================================================= */
-  var toques = [];
-  function tocarTitulo() {
-    var ahora = Date.now();
-    toques = toques.filter(function (t) { return ahora - t < 2500; });
-    toques.push(ahora);
-    if (toques.length >= 5) { toques = []; alternarPrueba(); }
-  }
-  function alternarPrueba(forzar) {
-    modoPrueba = typeof forzar === "boolean" ? forzar : !modoPrueba;
-    Progreso.prueba = modoPrueba ? JSON.parse(JSON.stringify(Progreso.real)) : null;
-    pintarPuertas();
-    avisar(modoPrueba ? "Modo de prueba activado: todas las puertas abiertas (no se guarda nada)." : "Modo de prueba desactivado.");
-  }
-
-  /* =========================================================
      Service Worker
      ========================================================= */
   function registrarSW() {
@@ -512,8 +491,6 @@
 
     $("form-clave").addEventListener("submit", alEnviarClave);
     $("btn-bloquear").addEventListener("click", bloquear);
-    $("btn-salir-prueba").addEventListener("click", function () { alternarPrueba(false); });
-    $("titulo").addEventListener("click", tocarTitulo);
     $("btn-volver").addEventListener("click", function () { cerrarDia(false); });
     $("btn-musica").addEventListener("click", function () { Musica.alternar(); });
     window.addEventListener("popstate", function () {

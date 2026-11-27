@@ -548,3 +548,11 @@ input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: .001ms !important; }
 }
+
+/* Indicador mientras se descarga y descifra una foto o video */
+.foto--cargando { position: relative; }
+.foto--cargando::after {
+  content: "Cargando…"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-style: italic; color: var(--tinta-suave); pointer-events: none;
+}
+.foto--video.foto--cargando::after { color: var(--crema); }

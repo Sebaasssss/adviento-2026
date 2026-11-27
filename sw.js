@@ -14,7 +14,7 @@
  * - contenido-plano.js y privado/ NUNCA se cachean.
  */
 
-const CACHE_VERSION = "v6";                 // ← súbelo (v2, v3...) en cada publicación
+const CACHE_VERSION = "v7";                 // ← súbelo (v2, v3...) en cada publicación
 const CACHE = "adviento-" + CACHE_VERSION;
 
 const RECURSOS = [
